@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/TriggerVolume.h"
+#include "GameFramework/Actor.h"
 #include "OpenDoor.generated.h"
 
 
@@ -11,6 +13,8 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDING_ESCAPE_API UOpenDoor : public UActorComponent
 {
 	GENERATED_BODY()
+
+
 
 public:	
 	// Sets default values for this component's properties
@@ -26,6 +30,15 @@ public:
 
 private:
 
-	float OpenAngle = 90.f;
-	float InitialYaw = 0.f;	
+	float OpenAngle;
+	float InitialYaw;
+	float TargetYaw;
+
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume* PressurePlate;	
+
+	UPROPERTY(EditAnywhere)
+	AActor* ActorThatOpens;
+
+	void OpenDoor(float DeltaTime);
 };
