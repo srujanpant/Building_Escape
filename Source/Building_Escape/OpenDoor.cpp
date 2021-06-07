@@ -1,6 +1,5 @@
 // Copyright 2021, Srujan Pant. All Rights Reserved.
 
-
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
 
@@ -13,7 +12,6 @@ UOpenDoor::UOpenDoor()
 
 	// ...
 }
-
 
 // Called when the game starts
 void UOpenDoor::BeginPlay()
@@ -32,7 +30,6 @@ void UOpenDoor::BeginPlay()
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
-
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -41,9 +38,19 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if(PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens))
 	{
 		OpenDoor(DeltaTime);
+		DoorLastOpened = GetWorld()->GetTimeSeconds();
 	}	
+	else
+	{	
+		float CurrentTime = GetWorld()->GetTimeSeconds();
+		if(CurrentTime - DoorLastOpened > DoorCloseDelay)
+		{	
+			CloseDoor(DeltaTime);
+		}	
+	}
 }
 
+//User Defined Function
 void UOpenDoor::OpenDoor(float DeltaTime)
 {
 	float CurrentYaw = GetOwner()->GetActorRotation().Yaw;
@@ -51,4 +58,13 @@ void UOpenDoor::OpenDoor(float DeltaTime)
 
 	OpenDoor.Yaw = FMath::FInterpTo(CurrentYaw,TargetYaw,DeltaTime,2);
 	GetOwner()->SetActorRotation(OpenDoor);
+}
+
+void UOpenDoor::CloseDoor(float DeltaTime)
+{
+	float CurrentYaw = GetOwner()->GetActorRotation().Yaw;
+	FRotator CloseDoor(0.f,0.f,0.f);
+
+	CloseDoor.Yaw = FMath::FInterpTo(CurrentYaw,InitialYaw,DeltaTime,2);
+	GetOwner()->SetActorRotation(CloseDoor);
 }
