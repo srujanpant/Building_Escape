@@ -1,7 +1,11 @@
 // Copyright 2021, Srujan Pant. All Rights Reserved.
 
-
+#include "DrawDebugHelpers.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/PlayerController.h"
 #include "Grabber.h"
+
+#define OUT
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -10,7 +14,6 @@ UGrabber::UGrabber()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
 
@@ -19,16 +22,6 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/*
-	1) Create a trigger Volume
-	2) Inheret it in the pickup object
-	3) Make EditAnywhere of pawn Actor and PressurePlate
-	4) TriggerPad contact gives console Log message that you can pick up the object
-	5) Assign E button to pickup
-	6) Get the default pawn Actor using code and use Actor position relative to function (or some other function with the same functionality) to transport the object relative to the default pawn
-	7) Set Actor Location could be used for the transform operation
-	*/
-	
 }
 
 
@@ -37,6 +30,25 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation,OUT PlayerViewPointRotation);
+
+	//UE_LOG(LogTemp,Warning,TEXT("Location: %s, Rotation: %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString());
+
+	FVector LineTraceDirection = PlayerViewPointRotation.Vector();
+	FVector LineTraceEnd = PlayerViewPointLocation + LineTraceDirection*Reach;
+
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FColor(0,255,0),
+		false,
+		0.f,
+		0,
+		5.f);
+
 }
 
