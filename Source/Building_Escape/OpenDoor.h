@@ -29,21 +29,30 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-
+	//User defined variables
 	float OpenAngle;
 	float InitialYaw;
 	float TargetYaw;
 	float DoorLastOpened = 0.f;
+	bool OpenDoorSound = false;
+	bool CloseDoorSound = true;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;	
+	float MassToOpenDoors = 50.f;
 
 	UPROPERTY(EditAnywhere)
-	AActor* ActorThatOpens;
+	ATriggerVolume* PressurePlate = nullptr;	
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 2.f;
 
+	UPROPERTY()
+	UAudioComponent* AudioComponent = nullptr;
+
+	//User defined functions
 	void OpenDoor(float DeltaTime);
 	void CloseDoor(float DeltaTime);
+	float TotalMassOfActors();
+	void FindAudioComponent();
+	void FindPressurePlate();
 };

@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine/TriggerVolume.h"
+#include "Components/InputComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -17,14 +18,29 @@ public:
 	// Sets default values for this component's properties
 	UGrabber();
 
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 private:
+	//User-defined Variables
 	float Reach = 100.f;
+
+	UPROPERTY()
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	UPROPERTY()
+	UInputComponent* InputComponent = nullptr;
+	
+	//User defined functions
+	void Grab();
+	void Release();
+	void FindPhysicsHandle();
+	void CheckInputComponent();
+	FHitResult GetObject();
+	FVector GetPlayerReach();
+	FVector GetPlayerPosition();
 };
