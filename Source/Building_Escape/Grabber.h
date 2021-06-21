@@ -27,7 +27,7 @@ protected:
 
 private:
 	//User-defined Variables
-	float Reach = 100.f;
+	float Reach = 250.f;
 
 	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
@@ -43,4 +43,5 @@ private:
 	FHitResult GetObject();
 	FVector GetPlayerReach();
 	FVector GetPlayerPosition();
+	FRotator GetPlayerRotation();
 };

@@ -34,7 +34,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	{
 		return;
 	}
-	
+
 	if(PhysicsHandle->GrabbedComponent)
 	{
 		PhysicsHandle->SetTargetLocation(GetPlayerReach());
@@ -53,7 +53,8 @@ void UGrabber::Grab()
 		{
 			return;
 		}
-		PhysicsHandle->GrabComponentAtLocation(GrabComponent, NAME_None, GetPlayerReach());
+		//PhysicsHandle->GrabComponentAtLocation(GrabComponent, NAME_None, GetPlayerReach());
+		PhysicsHandle->GrabComponentAtLocationWithRotation(GrabComponent, NAME_None, GetPlayerReach(), GetPlayerRotation());
 	}
 }
 
@@ -83,7 +84,7 @@ void UGrabber::CheckInputComponent()
 	if(InputComponent)
 	{
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+		InputComponent->BindAction("Release", IE_Pressed, this, &UGrabber::Release);
 	}
 }
 
@@ -122,4 +123,14 @@ FVector UGrabber::GetPlayerPosition()
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation,OUT PlayerViewPointRotation);
 
 	return PlayerViewPointLocation;
+}
+
+FRotator UGrabber::GetPlayerRotation()
+{
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation,OUT PlayerViewPointRotation);
+
+	return PlayerViewPointRotation;
 }
